@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="icons/jackfruit-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" /> <!-- Main theme can be white now -->
+    <meta
+      name="description"
+      content="Jackfruit Disease Classification Web App"
+    />
+    <link rel="apple-touch-icon" href="icons/jackfruit-icon.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Fruit Fly Classifier</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow: hidden;
+      }
+
+      #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #fdf8e1; /* MAIN BACKGROUND IS WHITE */
+        display: flex;             /* For centering text content block */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;       /* Default alignment for text block */
+        z-index: 9999;
+        transition: opacity 0.7s ease-out, visibility 0.7s ease-out;
+        visibility: visible;
+        opacity: 1;
+        overflow: hidden;          /* Important */
+        position: relative;        /* For absolute positioning of the green swoosh */
+      }
+
+      #splash-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .green-swoosh-panel {
+        position: absolute; /* Positioned on top of the white background */
+        left: 0;
+        top: 0;
+        width: 45%; /* TWEAK: How much of the screen the green part takes */
+        height: 100%;
+        background: linear-gradient(135deg, #5a8c33 0%, #75a94e 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px; /* Inner padding for the fruit image */
+        box-sizing: border-box;
+        z-index: 10; /* Above white background, but text can be higher if needed */
+
+        /* CURVE ON THE RIGHT SIDE NOW - TWEAK THESE VALUES EXTENSIVELY */
+        border-top-right-radius:    120px 45vh;  /* H-radius V-radius. TWEAK! */
+        border-bottom-right-radius: 120px 45vh;  /* TWEAK! */
+        /* Shadow on the right edge of the green panel */
+        box-shadow: 7px 0px 20px rgba(0,0,0,0.15);
+      }
+
+      .splash-main-fruit {
+        position: absolute; 
+        left: 50%;         
+        top: 50%;
+        max-width: 310px;
+        width: 90%;
+        max-height: 90%;
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.25));
+        animation-name: pulse-animation;     
+        animation-duration: 1.5s;               
+        animation-timing-function: ease-in-out;  
+        animation-iteration-count: infinite; 
+      }
+
+      @keyframes pulse-animation {
+  0% {
+    transform: translate(-50%, -50%) scale(1);   /* Start at normal size */
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1); /* Scale up to 110% at midpoint */
+    opacity: 0.9; /* Optional: slightly fade if desired */
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);   /* Return to normal size */
+    opacity: 1;}}
+
+      /* This container will hold your text and will be offset from the green swoosh */
+      .splash-text-container {
+        position: relative; /* Keeps it in flow but allows z-index */
+        z-index: 20;        /* Ensure text is above green swoosh if any accidental overlap */
+        width: 100%;        /* Takes full width of splash-screen initially */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; /* Centers content horizontally within this container */
+        text-align: center;
+        box-sizing: border-box;
+        /* CRITICAL: Push the text content to the right of the green swoosh */
+        /* (width of .green-swoosh-panel) + (extra for curve/shadow visual depth) */
+        padding-left: calc(45% + 60px); /* TWEAK '45%' and '60px' */
+        padding-right: 5vw; /* General right padding */
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+      }
+
+
+      .splash-title {
+        font-size: clamp(1.8em, 5vw, 2.8em);
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 10px;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .splash-subtitle {
+        font-size: clamp(0.9em, 2.5vw, 1.2em);
+        color: #7f8c8d;
+        margin-bottom: 30px;
+      }
+
+      .spinner {
+        border: 5px solid rgba(0, 0, 0, 0.08);
+        border-radius: 50%;
+        border-top-color: #6db33f; 
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin-top: 20px;
+      }
+
+
+
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .green-swoosh-panel {
+          width: 100%;
+          height: 40%; /* Green swoosh at the top */
+          /* Curve on the bottom edge */
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 40vw 80px; /* Tweak */
+          border-bottom-left-radius: 40vw 80px;  /* Tweak */
+          box-shadow: 0px 7px 15px rgba(0,0,0,0.1);
+        }
+        .splash-main-fruit {
+            width: 50%; max-width: 150px; max-height: 70%;
+        }
+        .splash-text-container {
+          /* Text container now takes space below the green panel */
+          padding-left: 5vw; /* Reset side padding */
+          padding-top: calc(40% + 30px); /* (height of green-swoosh) + (buffer) */
+          align-items: center; /* Ensure centered on smaller screens */
+        }
+      }
+    </style>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <div id="splash-screen">
+        <!-- Green swoosh is an absolutely positioned background element -->
+        <div class="green-swoosh-panel">
+            <img src="icons/jackfruitt.png" alt="Jackfruit" class="splash-main-fruit" />
+        </div>
+
+        <!-- Text content is in its own container, offset from the green swoosh -->
+        <div class="splash-text-container">
+            <h1 class="splash-title">JACKFRUIT DAMAGE<br/>CLASSIFICATION</h1>
+            <!-- <p class="splash-subtitle">AI-Powered Disease Detection</p> -->
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div id="root"></div> <!-- Your React app mounts here -->
+</body>
+</html>
