@@ -15,14 +15,6 @@ import os # For path joining, good practice
 app = Flask(__name__)
 CORS(app) # Enable CORS for all routes
 
-# --- Configuration ---
-# Define a base directory for models if they are in a subfolder relative to app.py
-# Or use absolute paths if preferred.
-# For example, if models are in a 'models' subfolder:
-# MODEL_DIR = os.path.join(os.path.dirname(__file__), 'models')
-# CNN_MODEL_PATH = os.path.join(MODEL_DIR, 'jackfruit_cnn_feature_extractor.h5')
-# SCALER_PATH = os.path.join(MODEL_DIR, 'jackfruit_feature_scaler.pkl')
-# SVM_MODEL_PATH = os.path.join(MODEL_DIR, 'jackfruit_svm_classifier.pkl')
 
 # Assuming models are in the same directory as app.py for simplicity based on your snippet:
 CNN_MODEL_PATH = 'jackfruit_cnn_feature_extractor.h5'
@@ -183,6 +175,12 @@ def health_check():
     else:
         return jsonify({"status": "DEGRADED", "message": "Analysis service is running but one or more models failed to load."}), 503
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST')
+    return response
 
 # --- Run the App ---
 if __name__ == '__main__':

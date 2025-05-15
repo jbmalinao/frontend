@@ -228,7 +228,8 @@ function App() {
   const [error, setError] = useState(null);
 
   // Use environment variable for backend URL
-  const BACKEND_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const BACKEND_URL = process.env.REACT_APP_API_URL; 
+  // || 'http://localhost:5000';
 
   // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   // ADD THIS useEffect TO HIDE THE SPLASH SCREEN
@@ -279,10 +280,15 @@ function App() {
     formData.append('file', imageBlob, identifier || 'cropped_image.jpg');
 
     try {
-      const response = await fetch(`${BACKEND_URL}/predict`, {
-        method: 'POST',
-        body: formData,
-      });
+      // const response = await fetch(`${BACKEND_URL}/predict`, {
+      //   method: 'POST',
+      //   body: formData,
+      // });
+      const response = await fetch("https://backend-0p95.onrender.com/predict", {
+      method: "POST",
+      body: formData,
+    });
+
 
       const responseText = await response.text();
 
