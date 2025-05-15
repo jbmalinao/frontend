@@ -31,7 +31,8 @@ body {
   background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 8px 25px var(--shadow-color);
-  overflow: hidden; /* Contain elements */
+  /* overflow: hidden; */
+  overflow-y: auto;
 }
 
 .left-panel,
@@ -437,3 +438,10 @@ h2 {
   outline: 2px solid var(--jackfruit-yellow, #f0ad4e); /* Focus indicator */
   outline-offset: 2px;
 }
+
+/* html, body, #root {
+  height: auto;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+} */

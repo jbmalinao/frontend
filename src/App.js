@@ -69,9 +69,14 @@ function App() {
     formData.append('file', imageBlob, identifier || 'cropped_image.jpg');
 
     try {
-        const response = await fetch('http://localhost:5000/predict', {
-            method: 'POST',
-            body: formData,
+        // const response = await fetch('http://localhost:5000/predict', {
+        //     method: 'POST',
+        //     body: formData,
+        // });
+        const apiUrl = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${apiUrl}/predict`, {
+        method: 'POST',
+        body: formData,
         });
 
         const responseData = await response.json(); // Always try to parse JSON first
