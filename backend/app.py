@@ -186,15 +186,5 @@ def health_check():
 
 # --- Run the App ---
 if __name__ == '__main__':
-    # Setup basic logging for Flask if not already configured
-    if not app.debug: # Don't use Flask's default logger if in production, configure properly
-        import logging
-        # Example: stream_handler = logging.StreamHandler()
-        # stream_handler.setLevel(logging.INFO)
-        # app.logger.addHandler(stream_handler)
-        app.logger.setLevel(logging.INFO) # Or DEBUG for more verbosity
-    else:
-        app.logger.setLevel(logging.DEBUG) # When debug=True, Flask's logger is already quite verbose
-
-    app.logger.info("Starting Jackfruit Disease Classification API...")
-    app.run(host='0.0.0.0', port=5000, debug=True) # debug=True is fine for development
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

@@ -1,8 +1,7 @@
 Flask
-Flask-CORS
-gunicorn
+flask-cors
 tensorflow
+numpy
+Pillow
 scikit-learn
 joblib
-Pillow
-numpy
