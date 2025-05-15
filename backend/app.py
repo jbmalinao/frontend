@@ -342,12 +342,7 @@ def health_check():
 # REMOVED: Manual @app.after_request for CORS. Let flask_cors handle it.
 
 # --- Run the App ---
-if __name__ == '__main__':
-    # When running locally for development, you might want debug mode on.
-    # For Railway, Gunicorn (or similar) will likely be used via the Start Command,
-    # and this app.run() block won't be executed by Gunicorn.
-    # However, it's good for local `python app.py` testing.
-    port = int(os.environ.get("PORT", 5000)) # Railway provides PORT
-    # For local dev, you might want debug=True. For PaaS, debug should be False or managed by the WSGI server.
-    # If using Gunicorn, it controls the debug/production mode.
-    app.run(host='0.0.0.0', port=port, debug=os.environ.get("FLASK_DEBUG", "False").lower() == "true")
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
