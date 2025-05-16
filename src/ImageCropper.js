@@ -4,9 +4,8 @@ import ReactCrop, {
   makeAspectCrop,
   convertToPixelCrop,
 } from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css'; // Import default styling
+import 'react-image-crop/dist/ReactCrop.css'; 
 
-// Helper function to generate the cropped image (often found in react-image-crop examples)
 function getCroppedImg(image, pixelCrop, fileName) {
   const canvas = document.createElement('canvas');
   canvas.width = pixelCrop.width;
@@ -18,8 +17,6 @@ function getCroppedImg(image, pixelCrop, fileName) {
 
   const scaleX = image.naturalWidth / image.width;
   const scaleY = image.naturalHeight / image.height;
-  // devicePixelRatio slightly increases sharpness on retina devices
-  // but can cause issues when cutting out pieces of shadows, so lower settings are generally better.
   const pixelRatio = window.devicePixelRatio || 1;
 
   canvas.width = Math.floor(pixelCrop.width * scaleX * pixelRatio);
@@ -36,15 +33,8 @@ function getCroppedImg(image, pixelCrop, fileName) {
 
   ctx.save();
 
-  // 5) Move the crop origin to the canvas origin (0,0)
   ctx.translate(-cropX, -cropY);
-  // 4) Move the origin to the center of the original position
   ctx.translate(centerX, centerY);
-  // 3) Rotate around the origin
-  // ctx.rotate(rotate * Math.PI / 180) // Rotation logic removed for simplicity
-  // 2) Scale the image
-  // ctx.scale(scale, scale) // Scale logic removed for simplicity
-  // 1) Move the center of the image to the origin (0,0)
   ctx.translate(-centerX, -centerY);
 
   ctx.drawImage(
@@ -61,7 +51,6 @@ function getCroppedImg(image, pixelCrop, fileName) {
 
   ctx.restore();
 
-  // Return Promise to get Blob
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (!blob) {
@@ -69,33 +58,29 @@ function getCroppedImg(image, pixelCrop, fileName) {
         reject(new Error('Canvas is empty'));
         return;
       }
-      blob.name = fileName; // Add filename property to the blob
-      // Cleanup canvas
+      blob.name = fileName; 
       canvas.remove();
-       resolve(blob); // Pass the blob directly
-    }, 'image/jpeg'); // You can change the format if needed (e.g., 'image/png')
+       resolve(blob); 
+    }, 'image/jpeg'); 
   });
 }
 
 
 function ImageCropper({ src, onCropComplete, onCancel }) {
-  const aspect = undefined; // Make it freeform (or set 1 for square, 16 / 9 for wide, etc.)
-  const [crop, setCrop] = useState(); // This stores { unit: '%', x, y, width, height }
-  const [completedCrop, setCompletedCrop] = useState(); // This stores the pixel crop data
+  const aspect = undefined; 
+  const [crop, setCrop] = useState(); 
+  const [completedCrop, setCompletedCrop] = useState(); 
   const imgRef = useRef(null);
 
-   // Center the crop region on image load
    function onImageLoad(e) {
     const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
     const crop = centerCrop(
       makeAspectCrop(
         {
-          // You don't need preset values here if you want it freeform
-          // Let's center a 50% initial crop as a starting point
           unit: '%',
           width: 50,
         },
-        aspect || width / height, // Calculate aspect based on image or use undefined for freeform
+        aspect || width / height, 
         width,
         height
       ),
@@ -103,14 +88,13 @@ function ImageCropper({ src, onCropComplete, onCancel }) {
       height
     );
     setCrop(crop);
-    setCompletedCrop(convertToPixelCrop(crop, width, height)); // Initialize completed crop
+    setCompletedCrop(convertToPixelCrop(crop, width, height)); 
   }
 
   async function handleCropImage() {
     const image = imgRef.current;
     if (!image || !completedCrop || !completedCrop.width || !completedCrop.height) {
       console.error('Image ref or crop dimensions missing');
-      // Optionally, notify the user
       alert("Could not crop image. Please ensure you've selected a crop area.");
       return;
     }
@@ -119,45 +103,42 @@ function ImageCropper({ src, onCropComplete, onCancel }) {
        const croppedBlob = await getCroppedImg(
            image,
            completedCrop,
-           `cropped-${Date.now()}.jpg` // Generate a simple filename
+           `cropped-${Date.now()}.jpg` 
        );
-        // Generate a temporary URL for the Blob to show a preview immediately *if needed*,
-        // otherwise just pass the blob. Let's pass the blob.
-       onCropComplete(croppedBlob); // Send the Blob back to the App component
+       onCropComplete(croppedBlob); 
     } catch (e) {
         console.error("Cropping failed: ", e);
-        alert("Image cropping failed. Please try again."); // Notify user
+        alert("Image cropping failed. Please try again."); 
     }
 
   }
 
 
   if (!src) {
-    return null; // Don't render anything if there's no source image
+    return null; 
   }
 
   return (
-    <div className="cropper-modal-overlay"> {/* Basic overlay styling */}
+    <div className="cropper-modal-overlay"> {}
       <div className="cropper-modal-content">
         <h3>Crop Your Image</h3>
         <p>Select the relevant area to analyze.</p>
         <div className="cropper-container">
           <ReactCrop
             crop={crop}
-            onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)} // Update percent crop state
-            onComplete={(c) => setCompletedCrop(c)} // Update pixel crop state
+            onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)} 
+            onComplete={(c) => setCompletedCrop(c)} 
             aspect={aspect}
-             minWidth={50} // Minimum crop size in pixels
+             minWidth={50} 
              minHeight={50}
-            // circularCrop={true} // Uncomment for circular crop
-             locked={false} // Keep unlocked initially unless aspect is set
+             locked={false}
           >
-             {/* We must provide an img element */}
+             {}
             <img
               ref={imgRef}
               alt="Crop me"
               src={src}
-              style={{ maxHeight: '70vh', display: 'block' }} // Style to fit within modal
+              style={{ maxHeight: '70vh', display: 'block' }} 
                onLoad={onImageLoad}
             />
           </ReactCrop>

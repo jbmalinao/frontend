@@ -1,13 +1,12 @@
-/* --- Color Scheme --- */
 :root {
-  --jackfruit-bg: #fdf8e1; /* Light creamy yellow background */
-  --jackfruit-green-dark: #386641; /* Dark green rind */
-  --jackfruit-green-light: #6a994e; /* Lighter green */
-  --jackfruit-yellow: #ffbf00; /* Vibrant yellow flesh accent */
-  --jackfruit-brown: #8a5a44;  /* Seed/Stem color */
-  --text-color: #2f3e46; /* Dark greyish text */
-  --border-color: #a7c95766; /* Lighter green with alpha */
-  --shadow-color: rgba(56, 102, 65, 0.2); /* Shadow based on dark green */
+  --jackfruit-bg: #fdf8e1; 
+  --jackfruit-green-dark: #386641; 
+  --jackfruit-green-light: #6a994e; 
+  --jackfruit-yellow: #ffbf00; 
+  --jackfruit-brown: #8a5a44; 
+  --text-color: #2f3e46; 
+  --border-color: #a7c95766; 
+  --shadow-color: rgba(56, 102, 65, 0.2); 
 }
 
 body {
@@ -58,25 +57,23 @@ h2 {
   padding-bottom: 10px;
 }
 
-/* --- Image Uploader --- */
 .dropzone {
   border: 3px dashed var(--jackfruit-green-light);
   border-radius: 10px;
-  padding: 30px 20px; /* Adjusted padding slightly */
+  padding: 30px 20px; 
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   background-color: #f9f9f9;
-  position: relative; /* For preview positioning if needed later */
-  min-height: 180px; /* Adjust min-height if needed */
-  display: flex; /* <<< ADD: Use Flexbox */
-  flex-direction: column; /* <<< ADD: Stack items vertically */
-  align-items: center; /* <<< ADD: Center items horizontally */
-  justify-content: center; /* <<< ADD: Center items vertically */
-  overflow: hidden; /* Prevent content spill */
+  position: relative; 
+  min-height: 180px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  overflow: hidden; 
 }
 
-/* Keep hover/active styles */
 .dropzone:hover,
 .dropzone.active {
   border-color: var(--jackfruit-yellow);
@@ -88,20 +85,14 @@ h2 {
   border-style: solid;
 }
 
-
-/* Style for the image preview */
 .dropzone img.preview-image {
   max-width: 100%;
-  max-height: 180px; /* Adjust max height as needed */
+  max-height: 180px; 
   border-radius: 5px;
-  /* margin-top: 0; Remove any top margin specific to preview if added */
-  object-fit: contain; /* Use 'contain' or 'cover' as preferred */
+  object-fit: contain; 
   animation: fadeIn 0.5s ease;
 }
 
-/* --- ADD Styles for the Icon and Default Text --- */
-
-/* Optional: style the content wrapper if needed */
 .dropzone-content {
    display: flex;
    flex-direction: column;
@@ -110,19 +101,18 @@ h2 {
 }
 
 .dropzone-icon {
-  width: 80px; /* Adjust size as desired */
-  height: auto; /* Maintain aspect ratio */
-  margin-bottom: 12px; /* Space between icon and text */
-  opacity: 0.65; /* Make icon slightly transparent */
-  /* remove bounce animation if previously applied */
-   animation: none; /* Remove previous upload-icon animation if any */
+  width: 80px; 
+  height: auto; 
+  margin-bottom: 12px;
+  opacity: 0.65; 
+   animation: none; 
 }
 
 .dropzone-text {
-  margin: 0; /* Reset paragraph margins */
+  margin: 0; 
   font-weight: 500;
-  color: var(--jackfruit-green-light); /* Use theme color */
-  font-size: 0.95em; /* Adjust text size if needed */
+  color: var(--jackfruit-green-light); 
+  font-size: 0.95em; 
 }
 
 .dropzone:hover,
@@ -138,19 +128,14 @@ h2 {
 }
 
 .upload-icon {
-  /* max-width: 100px;
-  width: 90%;
-  max-height: 90%;
-  height: auto;
-  object-fit: contain; */
-  font-size: 3em; /* Or use an SVG/Image icon */
+  font-size: 3em; 
   margin-bottom: 15px;
   animation: bounce 1.5s infinite ease-in-out;
 }
 
 .dropzone img.preview-image {
   max-width: 100%;
-  max-height: 150px; /* Adjust as needed */
+  max-height: 150px; 
   border-radius: 5px;
   margin-top: 15px;
   object-fit: cover;
@@ -177,13 +162,13 @@ h2 {
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative; /* For potential overlay/selection */
+  position: relative; 
 }
 
 .stock-image-item img {
   display: block;
   width: 100%;
-  height: 100px; /* Fixed height for uniformity */
+  height: 100px; 
   object-fit: cover;
 }
 
@@ -193,7 +178,6 @@ h2 {
   border-color: var(--jackfruit-yellow);
 }
 
-/* --- Results Display --- */
 .results-display {
   text-align: center;
 }
@@ -204,7 +188,7 @@ h2 {
     padding: 50px 0;
     border: 2px dashed var(--border-color);
     border-radius: 10px;
-    margin-top: 20px; /* Align with potential results */
+    margin-top: 20px; 
     animation: fadeIn 0.8s ease;
 }
 
@@ -247,22 +231,22 @@ h2 {
   height: 20px;
   margin-top: 8px;
   overflow: hidden;
-  position: relative; /* For percentage text */
+  position: relative; 
 }
 
 .progress-bar {
   height: 100%;
   background: linear-gradient(90deg, var(--jackfruit-green-light) 0%, var(--jackfruit-yellow) 100%);
-  border-radius: 5px 0 0 5px; /* Keep left radius */
-  transition: width 1s ease-out; /* Animation for width change */
+  border-radius: 5px 0 0 5px; 
+  transition: width 1s ease-out; 
   text-align: right;
   line-height: 20px;
   color: white;
   font-size: 0.8em;
   font-weight: bold;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-  padding-right: 5px; /* Padding for text inside bar */
-  animation: fillBar 1s ease-out forwards; /* Keyframe animation */
+  padding-right: 5px; 
+  animation: fillBar 1s ease-out forwards;
 }
 
 /* --- Animations --- */
@@ -290,11 +274,9 @@ h2 {
 
 @keyframes fillBar {
   from { width: 0; }
-  /* 'to' width is set inline */
 }
 
 
-/* Responsive adjustments (Example) */
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;
@@ -314,18 +296,18 @@ h2 {
 }
 
 .cropper-modal-overlay {
-  position: fixed; /* Stay in place */
-  z-index: 1000; /* Sit on top */
+  position: fixed; 
+  z-index: 1000; 
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(47, 62, 70, 0.7); /* Dim background */
-  display: flex; /* Use flexbox for centering */
-  align-items: center; /* Vertical center */
-  justify-content: center; /* Horizontal center */
-  animation: fadeIn 0.3s ease; /* Use existing fade */
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgba(47, 62, 70, 0.7); 
+  display: flex; 
+  align-items: center;
+  justify-content: center; 
+  animation: fadeIn 0.3s ease; 
 }
 
 .cropper-modal-content {
@@ -334,7 +316,7 @@ h2 {
   padding: 25px 30px;
   border: 1px solid #888;
   width: 80%;
-  max-width: 700px; /* Max width for the modal */
+  max-width: 700px; 
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   text-align: center;
@@ -351,21 +333,18 @@ h2 {
 }
 
 .cropper-container {
-  display: flex; /* Helps center the image if it's smaller */
+  display: flex; 
   justify-content: center;
   align-items: center;
-  background-color: #eee; /* Background behind image */
+  background-color: #eee; 
   border-radius: 5px;
-  overflow: hidden; /* Ensure image doesn't overflow */
+  overflow: hidden; 
   border: 1px solid var(--border-color);
   margin-bottom: 20px;
 }
 
-/* ReactCrop adds specific classes, you might need to target them
-   if the default styling ('react-image-crop/dist/ReactCrop.css') isn't sufficient */
 .ReactCrop__crop-selection {
-  border: 2px dashed var(--jackfruit-yellow); /* Make selection more visible */
-}
+  border: 2px dashed var(--jackfruit-yellow);}
 
 .cropper-actions {
   display: flex;
@@ -408,34 +387,32 @@ h2 {
 {color: var(--jackfruit-green-dark);}
 
 .disclaimer-note {
-  margin-top: 20px; /* Space above the note */
+  margin-top: 20px;
   padding: 10px 15px;
-  background-color: #fdf8e1; /* A light yellow or off-white, less prominent than error */
-  /* border-left: 4px solid #f0ad4e; A yellow/orange border for attention */
+  background-color: #fdf8e1; 
   border-radius: 4px;
   font-size: 0.9em;
-  color: #555; /* Dark grey text */
+  color: #555; 
 }
 
 .disclaimer-note p {
-  margin: 0; /* Remove default paragraph margin if any */
+  margin: 0; 
   line-height: 1.5;
 }
 
 .disclaimer-note strong {
-  color: #333; /* Slightly darker for the "Please take note" */
+  color: #333; 
 }
 
-/* In your App.css or relevant CSS file */
 .result-item.clickable {
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
 
 .result-item.clickable:hover,
-.result-item.clickable:focus { /* Style for hover and keyboard focus */
-  background-color: #f0f0f0; /* Or a slightly darker shade of its current background */
-  outline: 2px solid var(--jackfruit-yellow, #f0ad4e); /* Focus indicator */
+.result-item.clickable:focus { 
+  background-color: #f0f0f0; 
+  outline: 2px solid var(--jackfruit-yellow, #f0ad4e); 
   outline-offset: 2px;
 }
 

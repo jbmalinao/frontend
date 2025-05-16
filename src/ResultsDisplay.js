@@ -1,10 +1,10 @@
-import React, { useState } from 'react'; // Import useState
-import DiseaseModal from './/DiseaseModal'; // Import the modal component
-import { diseaseDescriptions } from './data/diseaseInfo'; // Import descriptions (adjust path if needed)
+import React, { useState } from 'react'; 
+import DiseaseModal from './/DiseaseModal'; 
+import { diseaseDescriptions } from './data/diseaseInfo'; 
 
 function ResultsDisplay({ results, isLoading, error }) {
   const [showModal, setShowModal] = useState(false);
-  const [selectedDisease, setSelectedDisease] = useState(null); // Will store { name, description }
+  const [selectedDisease, setSelectedDisease] = useState(null); 
 
   const handleResultClick = (diseaseName) => {
     const description = diseaseDescriptions[diseaseName] || "No specific information available for this condition.";
@@ -14,11 +14,10 @@ function ResultsDisplay({ results, isLoading, error }) {
 
   const closeModal = () => {
     setShowModal(false);
-    setSelectedDisease(null); // Reset selected disease
+    setSelectedDisease(null); 
   };
 
   if (isLoading) {
-    // ... (isLoading JSX)
     return (
         <div className="results-display">
              <h2>Analysis Results</h2>
@@ -28,7 +27,7 @@ function ResultsDisplay({ results, isLoading, error }) {
   }
 
   if (error) {
-    // ... (error JSX)
+    
     return (
       <div className="results-display">
          <h2>Analysis Results</h2>
@@ -38,7 +37,7 @@ function ResultsDisplay({ results, isLoading, error }) {
   }
 
   if (!results || results.length === 0) {
-    // ... (no results JSX)
+  
     return (
       <div className="results-display">
         <h2>Analysis Results</h2>
@@ -56,12 +55,12 @@ function ResultsDisplay({ results, isLoading, error }) {
         {results.map((result, index) => (
           <li
             key={index}
-            className="result-item clickable" // Add 'clickable' class for styling
+            className="result-item clickable" 
             style={{ borderColor: result.percentage === maxPercentage ? 'var(--jackfruit-yellow)' : 'var(--jackfruit-green-light)' }}
-            onClick={() => handleResultClick(result.name)} // Handle click
-            role="button" // Accessibility: indicates it's clickable
-            tabIndex={0}  // Accessibility: makes it focusable
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleResultClick(result.name)} // Accessibility: keyboard activation
+            onClick={() => handleResultClick(result.name)} 
+            role="button" 
+            tabIndex={0}  
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleResultClick(result.name)} 
           >
             <span>{result.name}:</span>
             <div className="progress-bar-container">
@@ -82,7 +81,7 @@ function ResultsDisplay({ results, isLoading, error }) {
         </p>
       </div>
 
-      {/* Render the Modal */}
+      {}
       {showModal && selectedDisease && (
         <DiseaseModal
           diseaseName={selectedDisease.name}

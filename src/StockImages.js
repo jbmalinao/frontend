@@ -1,12 +1,10 @@
 import React from 'react';
 
-// Assuming images are in public/images/
 const stockImageData = [
   { id: 'stock1', src: '/images/stock1.jpg', alt: 'Stock Jackfruit 1' },
   { id: 'stock2', src: '/images/stock2.jpg', alt: 'Stock Jackfruit 2' },
     { id: 'stock3', src: '/images/stock6.jpg', alt: 'Stock Jackfruit 3' },
   { id: 'stock4', src: '/images/stock6.jpeg', alt: 'Stock Jackfruit 4' },
-  // Add more images as needed
 ];
 
 function StockImages({ onStockImageSelect }) {
@@ -18,7 +16,7 @@ function StockImages({ onStockImageSelect }) {
           <div
             key={image.id}
             className="stock-image-item"
-            onClick={() => onStockImageSelect(image.src)} // Pass the src URL up
+            onClick={() => onStockImageSelect(image.src)} 
           >
             <img src={image.src} alt={image.alt} />
           </div>
