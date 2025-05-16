@@ -204,6 +204,15 @@ app = Flask(__name__)
 # Option 1: Allow all origins for all routes (simplest for getting started)
 CORS(app)
 
+FRONTEND_URL_FROM_ENV = os.environ.get("FRONTEND_APP_URL") # This will be None initially
+if FRONTEND_URL_FROM_ENV and FRONTEND_URL_FROM_ENV != "ALLOW_ALL_FOR_SETUP":
+    print(f"* Configuring CORS for specific origin: {FRONTEND_URL_FROM_ENV}")
+    CORS(app, resources={r"/*": {"origins": FRONTEND_URL_FROM_ENV}})
+else:
+    print("* FRONTEND_APP_URL not set. Configuring CORS to allow all origins (for initial setup/dev).")
+    CORS(app) 
+
+
 # Option 2 (More Secure - Recommended after initial setup):
 # Replace 'https://your-react-frontend.up.railway.app' with your actual frontend URL on Railway
 # FRONTEND_URL = os.environ.get("FRONTEND_APP_URL", "http://localhost:3000") # Get from env var
