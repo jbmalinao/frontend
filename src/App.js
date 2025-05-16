@@ -228,8 +228,7 @@ function App() {
   const [error, setError] = useState(null);
 
   // Use environment variable for backend URL
-  const BACKEND_URL = process.env.REACT_APP_API_URL; 
-  // || 'http://localhost:5000';
+  const BACKEND_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   // ADD THIS useEffect TO HIDE THE SPLASH SCREEN
@@ -278,15 +277,21 @@ function App() {
 
     const formData = new FormData();
     formData.append('file', imageBlob, identifier || 'cropped_image.jpg');
-
+    
+    const targetUrl = `${BACKEND_URL}/predict`;
+    console.log("!!! CRITICAL: Attempting to fetch from this EXACT URL:", targetUrl);
+    if (!BACKEND_URL) {
+        console.error("!!! CRITICAL: API_BASE_URL is undefined or empty!");
+        // ... handle error ...
+    }
     try {
-      // const response = await fetch(`${BACKEND_URL}/predict`, {
-      //   method: 'POST',
-      //   body: formData,
-      // });
-      const response = await fetch("https://backend-0p95.onrender.com/predict", {
-      method: "POST",
-      body: formData,
+      const response = await fetch(`${BACKEND_URL}/predict`, {
+        method: 'POST',
+        body: formData,
+      // // });
+      // const response = await fetch("https://backend-0p95.onrender.com/predict", {
+      // method: "POST",
+      // body: formData,
     });
 
 
@@ -338,42 +343,137 @@ function App() {
   }, [BACKEND_URL]);
 
   // --- Handlers ---
-  const handleImageSelected = useCallback((imageSourceUrl) => {
-    if (previewUrl && previewUrl.startsWith('blob:')) {
-      URL.revokeObjectURL(previewUrl);
-    }
-    if (originalImageSrc && originalImageSrc.startsWith('blob:')) {
-      URL.revokeObjectURL(originalImageSrc);
-    }
-    setPreviewUrl(null);
-    setResults(null);
-    setError(null);
-    setIsLoading(false);
-    setImageBlobToAnalyze(null);
-    setOriginalImageSrc(imageSourceUrl);
-    setShowCropper(true);
-  }, [previewUrl, originalImageSrc]);
+  // const handleImageSelected = useCallback((imageSourceUrl) => {
+  //   if (previewUrl && previewUrl.startsWith('blob:')) {
+  //     URL.revokeObjectURL(previewUrl);
+  //   }
+  //   if (originalImageSrc && originalImageSrc.startsWith('blob:')) {
+  //     URL.revokeObjectURL(originalImageSrc);
+  //   }
+  //   setPreviewUrl(null);
+  //   setResults(null);
+  //   setError(null);
+  //   setIsLoading(false);
+  //   setImageBlobToAnalyze(null);
+  //   setOriginalImageSrc(imageSourceUrl);
+  //   setShowCropper(true);
+  // }, [previewUrl, originalImageSrc]);
+  // In App.js
+
+// Keep a state for the original file if you need to bypass the cropper for testing
+// const [rawUploadedFile, setRawUploadedFile] = useState(null); // Optional, for debugging
+
+const handleImageSelected = useCallback((imageSourceUrl, originalFileObject = null) => { // Added originalFileObject
+  console.log("handleImageSelected - imageSourceUrl:", imageSourceUrl);
+  console.log("handleImageSelected - originalFileObject (if passed):", originalFileObject);
+
+  // Your existing cleanup logic for previewUrl and originalImageSrc
+  if (previewUrl && previewUrl.startsWith('blob:')) {
+    URL.revokeObjectURL(previewUrl);
+  }
+  if (originalImageSrc && originalImageSrc.startsWith('blob:')) {
+    URL.revokeObjectURL(originalImageSrc);
+  }
+
+  setPreviewUrl(null); // Clear existing preview if any
+  setResults(null);
+  setError(null);
+  setIsLoading(false);
+  // setImageBlobToAnalyze(null); // This state doesn't seem to be used if croppedBlob is passed directly
+
+  setOriginalImageSrc(imageSourceUrl); // This is what the cropper will use
+  // if (originalFileObject) {
+  //   setRawUploadedFile(originalFileObject); // Optional: store it for direct testing
+  // }
+  setShowCropper(true);
+}, [previewUrl, originalImageSrc /*, other dependencies like setPreviewUrl, setResults etc. */]);
+
+  // const handleImageUpload = useCallback((file) => {
+  //   const filePreviewUrl = URL.createObjectURL(file);
+  //   handleImageSelected(filePreviewUrl);
+  // }, [handleImageSelected]);
 
   const handleImageUpload = useCallback((file) => {
-    const filePreviewUrl = URL.createObjectURL(file);
-    handleImageSelected(filePreviewUrl);
-  }, [handleImageSelected]);
+  console.log("handleImageUpload - Received file object:", file);
+  if (!file) {
+    console.error("handleImageUpload - ERROR: No file received!");
+    return;
+  }
+  if (!(file instanceof File) && !(file instanceof Blob)) {
+     console.error("handleImageUpload - ERROR: Received item is not a File or Blob:", file);
+     return;
+  }
+  console.log(`handleImageUpload - File details: name='${file.name}', size=${file.size}, type='${file.type}'`);
+
+  const filePreviewUrl = URL.createObjectURL(file);
+  console.log("handleImageUpload - Created blob URL for preview:", filePreviewUrl);
+
+  handleImageSelected(filePreviewUrl, file);
+}, [handleImageSelected]);
+
+
 
   const handleStockImageSelect = useCallback((imageUrl) => {
     handleImageSelected(imageUrl);
   }, [handleImageSelected]);
 
-  const handleCropComplete = useCallback((croppedBlob) => {
+  // const handleCropComplete = useCallback((croppedBlob) => {
+  //   if (originalImageSrc && originalImageSrc.startsWith('blob:')) {
+  //     URL.revokeObjectURL(originalImageSrc);
+  //   }
+  //   setOriginalImageSrc(null);
+  //   setShowCropper(false);
+  //   const croppedUrl = URL.createObjectURL(croppedBlob);
+  //   setPreviewUrl(croppedUrl);
+  //   setImageBlobToAnalyze(croppedBlob);
+  //   processImageForAnalysis(croppedBlob, croppedBlob.name || 'jackfruit_crop.jpg');
+  // }, [originalImageSrc, processImageForAnalysis]);
+const handleCropComplete = useCallback((croppedBlob) => {
+  console.log("handleCropComplete - Received croppedBlob:", croppedBlob);
+  if (!croppedBlob) {
+    console.error("handleCropComplete - ERROR: croppedBlob is null or undefined!");
+    setError("Cropping failed to produce image data."); // Inform user
+    setShowCropper(false); // Hide cropper on failure
+    // Clean up originalImageSrc if it's a blob URL
     if (originalImageSrc && originalImageSrc.startsWith('blob:')) {
-      URL.revokeObjectURL(originalImageSrc);
+        URL.revokeObjectURL(originalImageSrc);
     }
     setOriginalImageSrc(null);
-    setShowCropper(false);
-    const croppedUrl = URL.createObjectURL(croppedBlob);
-    setPreviewUrl(croppedUrl);
-    setImageBlobToAnalyze(croppedBlob);
-    processImageForAnalysis(croppedBlob, croppedBlob.name || 'jackfruit_crop.jpg');
-  }, [originalImageSrc, processImageForAnalysis]);
+    return;
+  }
+  if (!(croppedBlob instanceof Blob)) {
+     console.error("handleCropComplete - ERROR: Cropped item is not a Blob:", croppedBlob);
+     setError("Cropped data is not valid image data."); // Inform user
+     // Same cleanup as above
+     setShowCropper(false);
+    if (originalImageSrc && originalImageSrc.startsWith('blob:')) {
+        URL.revokeObjectURL(originalImageSrc);
+    }
+    setOriginalImageSrc(null);
+     return;
+  }
+  console.log(`handleCropComplete - Cropped Blob details: size=${croppedBlob.size}, type='${croppedBlob.type}'`);
+
+
+  // Clean up the original image source URL (likely a blob URL from upload or stock image URL)
+  if (originalImageSrc && originalImageSrc.startsWith('blob:')) {
+    URL.revokeObjectURL(originalImageSrc);
+  }
+  setOriginalImageSrc(null); // Important to clear this
+  setShowCropper(false);
+
+  const croppedUrl = URL.createObjectURL(croppedBlob); // For the new preview
+  setPreviewUrl(croppedUrl);
+  // setImageBlobToAnalyze(croppedBlob); // This state doesn't seem to be used
+
+  // -------- THIS IS THE KEY CALL --------
+  // If you have a separate compression function like processAndSendImage:
+  // processAndSendImage(croppedBlob);
+  // Otherwise, call processImageForAnalysis directly:
+  processImageForAnalysis(croppedBlob, croppedBlob.name || 'user_cropped_image.jpg');
+  // ------------------------------------
+
+}, [originalImageSrc, processImageForAnalysis, previewUrl /*, other dependencies like setPreviewUrl, setError etc. */]);
 
   const handleCropCancel = useCallback(() => {
     setShowCropper(false);
