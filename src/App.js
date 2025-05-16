@@ -64,7 +64,7 @@ function App() {
         console.error("!!! CRITICAL: API_BASE_URL is undefined or empty!");
     }
     try {
-      const response = await fetch(`${BACKEND_URL}/predict`, {
+      const response = await fetch(targetUrl, {
         method: 'POST',
         body: formData,
     });
